@@ -447,14 +447,14 @@ func TestExecute(t *testing.T) {
 	}
 
 	tests := []struct {
-		name           string
-		hook           plugin.Hook
-		config         map[string]any
-		dryRun         bool
-		wantSuccess    bool
-		wantMsgPrefix  string
-		wantOutputKey  string
-		wantOutputVal  any
+		name          string
+		hook          plugin.Hook
+		config        map[string]any
+		dryRun        bool
+		wantSuccess   bool
+		wantMsgPrefix string
+		wantOutputKey string
+		wantOutputVal any
 	}{
 		{
 			name:   "dry_run_post_publish",
@@ -485,8 +485,8 @@ func TestExecute(t *testing.T) {
 			hook:   plugin.HookOnError,
 			dryRun: true,
 			config: map[string]any{
-				"webhook":          "https://discord.com/api/webhooks/123/token",
-				"notify_on_error":  true,
+				"webhook":         "https://discord.com/api/webhooks/123/token",
+				"notify_on_error": true,
 			},
 			wantSuccess:   true,
 			wantMsgPrefix: "Would send Discord error notification",
@@ -770,10 +770,10 @@ func TestDiscordMessageStructure(t *testing.T) {
 		p := &DiscordPlugin{}
 
 		cfg := &Config{
-			WebhookURL:      "https://discord.com/api/webhooks/123/token",
-			Username:        "TestBot",
-			NotifyOnError:   true,
-			Mentions:        []string{"<@admin>"},
+			WebhookURL:    "https://discord.com/api/webhooks/123/token",
+			Username:      "TestBot",
+			NotifyOnError: true,
+			Mentions:      []string{"<@admin>"},
 		}
 
 		releaseCtx := plugin.ReleaseContext{
@@ -1116,9 +1116,9 @@ func TestSendMessageWithMockServer(t *testing.T) {
 			p := &DiscordPlugin{}
 
 			msg := DiscordMessage{
-				Content:   "Test content",
-				Username:  "TestBot",
-				ThreadID:  tt.threadID,
+				Content:  "Test content",
+				Username: "TestBot",
+				ThreadID: tt.threadID,
 				Embeds: []Embed{
 					{
 						Title: "Test",
@@ -1374,9 +1374,9 @@ func TestDefaultColorBehavior(t *testing.T) {
 
 	t.Run("error_uses_red_when_color_not_set", func(t *testing.T) {
 		cfg := &Config{
-			WebhookURL:     "https://discord.com/api/webhooks/123/token",
-			NotifyOnError:  true,
-			Color:          0, // Not set
+			WebhookURL:    "https://discord.com/api/webhooks/123/token",
+			NotifyOnError: true,
+			Color:         0, // Not set
 		}
 
 		releaseCtx := plugin.ReleaseContext{
