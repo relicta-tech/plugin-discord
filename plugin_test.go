@@ -79,10 +79,10 @@ func TestValidate(t *testing.T) {
 
 	// Clear any environment variable that might interfere
 	origEnv := os.Getenv("DISCORD_WEBHOOK_URL")
-	os.Unsetenv("DISCORD_WEBHOOK_URL")
+	_ = os.Unsetenv("DISCORD_WEBHOOK_URL")
 	t.Cleanup(func() {
 		if origEnv != "" {
-			os.Setenv("DISCORD_WEBHOOK_URL", origEnv)
+			_ = os.Setenv("DISCORD_WEBHOOK_URL", origEnv)
 		}
 	})
 
@@ -193,8 +193,8 @@ func TestValidate(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Set environment variable if needed
 			if tt.envWebhook != "" {
-				os.Setenv("DISCORD_WEBHOOK_URL", tt.envWebhook)
-				defer os.Unsetenv("DISCORD_WEBHOOK_URL")
+				_ = os.Setenv("DISCORD_WEBHOOK_URL", tt.envWebhook)
+				defer func() { _ = os.Unsetenv("DISCORD_WEBHOOK_URL") }()
 			}
 
 			resp, err := p.Validate(ctx, tt.config)
@@ -250,10 +250,10 @@ func TestParseConfig(t *testing.T) {
 
 	// Clear environment variables for consistent testing
 	origEnv := os.Getenv("DISCORD_WEBHOOK_URL")
-	os.Unsetenv("DISCORD_WEBHOOK_URL")
+	_ = os.Unsetenv("DISCORD_WEBHOOK_URL")
 	t.Cleanup(func() {
 		if origEnv != "" {
-			os.Setenv("DISCORD_WEBHOOK_URL", origEnv)
+			_ = os.Setenv("DISCORD_WEBHOOK_URL", origEnv)
 		}
 	})
 
@@ -379,8 +379,8 @@ func TestParseConfig(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if tt.envWebhook != "" {
-				os.Setenv("DISCORD_WEBHOOK_URL", tt.envWebhook)
-				defer os.Unsetenv("DISCORD_WEBHOOK_URL")
+				_ = os.Setenv("DISCORD_WEBHOOK_URL", tt.envWebhook)
+				defer func() { _ = os.Unsetenv("DISCORD_WEBHOOK_URL") }()
 			}
 
 			cfg := p.parseConfig(tt.config)
@@ -579,7 +579,7 @@ func TestExecuteWithMockServer(t *testing.T) {
 		if err != nil {
 			t.Errorf("failed to read request body: %v", err)
 		}
-		defer r.Body.Close()
+		defer func() { _ = r.Body.Close() }()
 
 		if err := json.Unmarshal(body, &receivedPayload); err != nil {
 			t.Errorf("failed to unmarshal payload: %v", err)
@@ -1098,7 +1098,7 @@ func TestSendMessageWithMockServer(t *testing.T) {
 				if err != nil {
 					t.Errorf("failed to read body: %v", err)
 				}
-				defer r.Body.Close()
+				defer func() { _ = r.Body.Close() }()
 
 				if err := json.Unmarshal(body, &receivedPayload); err != nil {
 					t.Errorf("failed to unmarshal payload: %v", err)
@@ -1205,8 +1205,8 @@ func TestExecuteWithActualHTTPCall(t *testing.T) {
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body, _ := io.ReadAll(r.Body)
-		defer r.Body.Close()
-		json.Unmarshal(body, &receivedPayload)
+		defer func() { _ = r.Body.Close() }()
+		_ = json.Unmarshal(body, &receivedPayload)
 		w.WriteHeader(http.StatusNoContent)
 	}))
 	defer server.Close()
@@ -1444,10 +1444,10 @@ func TestValidateWithNilConfig(t *testing.T) {
 
 	// Clear environment variable
 	origEnv := os.Getenv("DISCORD_WEBHOOK_URL")
-	os.Unsetenv("DISCORD_WEBHOOK_URL")
+	_ = os.Unsetenv("DISCORD_WEBHOOK_URL")
 	defer func() {
 		if origEnv != "" {
-			os.Setenv("DISCORD_WEBHOOK_URL", origEnv)
+			_ = os.Setenv("DISCORD_WEBHOOK_URL", origEnv)
 		}
 	}()
 
