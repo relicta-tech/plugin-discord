@@ -1,10 +1,10 @@
 module github.com/relicta-tech/plugin-discord
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/relicta-tech/relicta-plugin-sdk v1.0.0
-	golang.org/x/text v0.32.0
+	golang.org/x/text v0.35.0
 )
 
 require (
